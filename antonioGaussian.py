@@ -1,3 +1,9 @@
+################################################################################
+# This scripts convert the standard 'antonioGaussian.m' function from the MIT saliency benchmark with default parameters (fc=6)
+# To produce the smoothed map is, use the following command: 
+# smooth_map = antonioGaussian(fixation_matrix, 6)
+################################################################################
+
 import numpy as np
 from scipy import fftpack
 
