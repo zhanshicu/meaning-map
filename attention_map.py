@@ -1,9 +1,22 @@
+################################################################################
+# This script generates the attentional map from eye movement data
+# and requires the following data file:
+# "HendersonHayes17-NHB_eyetracking_data.mat"; 
+# "gonme.jpg" -> an example scene image
+
+# the output will be the following data file:
+# "gnome-attentional-map.png"
+
+# Zhan Shi, Zhicheng Lin , Jan 5, 2025
+################################################################################
+
 import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
 from antonioGaussian import antonio_gaussian
 from scipy.ndimage import gaussian_filter
 
+# read the data
 mat = scipy.io.loadmat('HendersonHayes17-NHB_eyetracking_data.mat')
 
 D = mat['D']
@@ -43,25 +56,7 @@ for sbj_id in subject_ids:
 # Filter the fixation matrix
 filtered_fixation_matrix, _ = antonio_gaussian(fixation_matrix, 6)
 
-# use gaussian_filter from scipy.ndimage
-# filtered_fixation_matrix = gaussian_filter(fixation_matrix, 6)
-
-save_path = "attention_maps/scene_080.png"
+save_path = "gnome-attentional-map.png"
 
 if save_path:
     plt.imsave(save_path, filtered_fixation_matrix, cmap='viridis')
-
-# # Plot the original and filtered fixation matrices
-# plt.figure(figsize=(12, 6))
-
-# plt.subplot(1, 2, 1)
-# plt.title("Original Fixation Matrix")
-# plt.imshow(fixation_matrix, cmap='viridis')
-# # plt.colorbar()
-
-# plt.subplot(1, 2, 2)
-# plt.title("Attention Map")
-# plt.imshow(filtered_fixation_matrix, cmap='viridis')
-# # plt.colorbar()
-
-# plt.show()
