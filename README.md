@@ -1,2 +1,6 @@
 # meaning-map
 Automatic estimation of meaning maps (Henderson and Hayes, 2017) by fine-tuning a multi-modal large language model (LLM) LLaVA.
+
+Our ability to seemingly effortlessly focus attention on meaningful regions in complex scenes has long eluded automated analysis, requiring thousands of human judgments to map the semantic forces that guide our gaze. While meaning maps have emerged as powerful predictors of attention, at times surpassing traditional saliency models, their creation requires extensive human ratings that limit research scalability and reproducibility. Here we present an efficient computational approach for automated, real-time generation of meaning maps. We first demonstrate that a fine-tuned vision-language model (LLaVA) can predict human attention patterns with accuracy surpassing human raters. Building on this foundation, we develop a lightweight U-Net architecture trained on LLaVA’s outputs that achieves comparable accuracy while reducing processing time from 15 minutes to 0.034 seconds per image—a 25,000x speedup that makes real-time semantic analysis possible.
+
+<img width="962" alt="Screenshot 2025-01-12 at 09 50 07" src="https://github.com/user-attachments/assets/d60215bd-6e1c-41c5-b562-cab4d63a6a24" />
