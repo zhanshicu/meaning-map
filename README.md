@@ -16,4 +16,4 @@ The fine-tuned LLaVA often matches or outperforms human annotations (gray dashed
 
 First, download the data set of 40 digitized photographs and their corresponding meaning maps from [OSF](https://osf.io/ptsvm) provided by Henderson and Hayes (2017). They also provide the attentional maps that can be used to evaluate the models.
 
-Then, split the meaning maps into patches of degree 3 and 7. The codes are available at
+Then, split the meaning maps into patches of degree 3 and 7. Please refer to the file "attention_dataset.ipynb" for the steps of generating data to fine-tune LLaVA model.
