@@ -1,0 +1,111 @@
+import pandas as pd
+import numpy as np
+import os
+from PIL import Image
+import matplotlib.pyplot as plt
+import scipy.io
+from scipy.ndimage import gaussian_filter
+import cv2
+from tqdm import tqdm
+
+def create_circular_mask(h, w, center=None, radius=None):
+    """Create a circular mask with a given center and radius."""
+    if center is None:  # Default center to middle of the image
+        center = (int(w/2), int(h/2))
+    if radius is None:  # Default radius to smallest distance to edge
+        radius = min(center[0], center[1], w-center[0], h-center[1])
+
+    Y, X = np.ogrid[:h, :w]
+    dist_from_center = np.sqrt((X - center[0])**2 + (Y - center[1])**2)
+
+    mask = dist_from_center <= radius
+    return mask
+
+def likert_to_numeric(likert_label):
+    """Convert Likert scale labels to numeric values."""
+    likert_scale = {
+        'very low': 1, 'Very low': 1,
+        'low': 2,
+        'somewhat low': 3, 'Somewhat low': 3,
+        'somewhat high': 4, 'Somewhat high': 4,
+        'high': 5,
+        'very high': 6, 'Very high': 6
+    }
+    return likert_scale.get(likert_label, 0)  # Default to 0 if not found
+
+def plot_smoothed_meaning_map_from_csv(csv_file, sigma=5, gamma=3.0,
+                                       scene_filter=None, save_path=None):
+    """Generate and save a smoothed meaning map from CSV data."""
+    # Load CSV data
+    data = pd.read_csv(csv_file)
+
+    # Filter data by scene if a scene_filter is provided
+    if scene_filter:
+        data = data[data['scene'] == scene_filter]
+
+    if data.empty:
+        print(f"No data found for scene {scene_filter}. Skipping...")
+        return
+
+    # Determine original_shape from the data
+    max_x = data[['bbox_x_min', 'bbox_x_max']].values.max()
+    max_y = data[['bbox_y_min', 'bbox_y_max']].values.max()
+    original_shape = (int(max_y) + 1, int(max_x) + 1)
+
+    meaning_map = np.zeros(original_shape, dtype=np.float32)
+    count_map = np.zeros(original_shape, dtype=np.float32)
+
+    # Iterate through each row in the CSV
+    for _, row in data.iterrows():
+        likert_label = row['likert_label_predicted']
+        numeric_score = likert_to_numeric(likert_label)
+
+        # Safely convert coordinates to integers
+        try:
+            x_min, y_min = int(row['bbox_x_min']), int(row['bbox_y_min'])
+            x_max, y_max = int(row['bbox_x_max']), int(row['bbox_y_max'])
+            center = (int(row['center_x']), int(row['center_y']))
+            radius = int(row['radius'])
+        except ValueError:
+            print(f"Invalid data in row {row}. Skipping...")
+            continue
+
+        # Get the mask
+        mask = create_circular_mask(original_shape[0], original_shape[1], center=center, radius=radius)
+
+        # Crop mask and avoid out-of-bound indices
+        x_max = min(x_max, original_shape[1] - 1)
+        y_max = min(y_max, original_shape[0] - 1)
+        mask_cropped = mask[y_min:y_max+1, x_min:x_max+1]
+
+        # Place the numeric score in the corresponding location on the meaning map
+        meaning_map[y_min:y_max+1, x_min:x_max+1][mask_cropped] += numeric_score
+        count_map[y_min:y_max+1, x_min:x_max+1][mask_cropped] += 1
+
+    # Avoid division by zero
+    count_map[count_map == 0] = 1
+    smoothed_meaning_map = meaning_map / count_map
+
+    # Apply Gaussian filter for smoothing
+    smoothed_meaning_map = gaussian_filter(smoothed_meaning_map, sigma=sigma)
+    smoothed_meaning_map = np.power(smoothed_meaning_map, gamma)
+
+    # Plot the smoothed meaning map
+    if save_path:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.imsave(save_path, smoothed_meaning_map, cmap='hot')
+    plt.close()
+
+# Main processing loop
+csv_files = [f for f in os.listdir("predictions_output") if f.endswith('.csv')]
+
+for file in tqdm(csv_files):
+    csv_file = os.path.join("predictions_output", file)
+    data = pd.read_csv(csv_file)
+    scene_ids = data['scene'].unique()
+
+    for scene in tqdm(scene_ids):
+        save_path = f'scene_meaning/{scene.split("-")[0]}/meaning-{"-".join(scene.split("-")[1:])}.png'
+        if os.path.exists(save_path):
+            continue
+        plot_smoothed_meaning_map_from_csv(csv_file, scene_filter=scene, save_path=save_path)
