@@ -1,5 +1,11 @@
-#####
-
+################################################################################
+# This script modifies the codes for LLaVA inference to generate patch ratings
+# KEY PARAMETERS:
+# 1. model_path -> llava-v1.5-7b-merged_new as the weights of finetuned LLaVA
+# 2. query -> prompt to instruct LLaVA to give ratings
+# 3. data_dir -> path of data set for inference
+# 4. output_dir -> path of output directory
+################################################################################
 
 import logging
 import os
