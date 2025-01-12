@@ -10,3 +10,5 @@ We assessed performance by measuring the Pearson correlation between generated m
 <img width="1234" alt="Screenshot 2025-01-12 at 09 55 44" src="https://github.com/user-attachments/assets/fdba07dd-23bf-4df9-8d0d-fe26321d374b" />
 
 The fine-tuned LLaVA often matches or outperforms human annotations (gray dashed line), which demonstrates its capability to predict attention distributions within scenes with high accuracy.
+
+## To implement:
