@@ -1,8 +1,8 @@
 ################################################################################
 # This script generates the attentional map from eye movement data
 # and requires the following data file:
-# "HendersonHayes17-NHB_eyetracking_data.mat"; 
-# "gonme.jpg" -> an example scene image
+# 1. "HendersonHayes17-NHB_eyetracking_data.mat"; -> this file can be downloaded via OSF
+# 2. "gonme.jpg" -> an example scene image
 
 # the output will be the following data file:
 # "gnome-attentional-map.png"
