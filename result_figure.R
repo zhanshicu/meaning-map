@@ -1,4 +1,5 @@
 ################################################################################
+# This script plots the comparison result in scene_compare.py using a more professional way
 # This script requires the following data file:
 # "Correlation_results.xlsx"; 
 # Shangzhi Lu, Zhicheng Lin , Jan 5, 2025
