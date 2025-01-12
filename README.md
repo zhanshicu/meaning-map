@@ -16,6 +16,10 @@ The fine-tuned LLaVA often matches or outperforms human annotations (gray dashed
 
 First, download the data set of 40 digitized photographs and their corresponding meaning maps from [OSF](https://osf.io/ptsvm) provided by Henderson and Hayes (2017). They also provide the attentional maps that can be used to evaluate the models.
 
-Then, split the meaning maps into patches of degree 3 and 7. 
+Then, each image was segmented into partially overlapping circular patches at two scales: 300 patches at 3° and 108 patches at 7°. The segmentation yielded 12,000 patches at 3° and 4,320 patches at 7°, for a total of 16,320 patches. We construct data set in Q & A format to fine-tune the LLaVA model. Specifically, for patch ratings, we prompted the model to assess the meaningfulness of the input patch using the same six-point scale as human raters (set as Q): “Please assess the meaningfulness of the depicted patch using the following scale: ‘very low,’ ‘low,’ ‘somewhat low,’ ‘somewhat high,’ ‘high,’ and ‘very high.’ Provide your response by selecting one of these categories.” Please refer to "dataset.ipynb" for details.
 
 For large-scale implementation, please refer to the file "attention_dataset.ipynb" for the steps of generating data with GPU acceleration.
+
+After preparing the data set, we turn to finetune the LLaVA using the codes displayed in "llava-finetune.ipynb". Please note that users must first download the weights of pre-trained LLaVA from HuggingFace. We use the version of LLaVA-1.5-7B in the experiment. If parallel training is employed when finetuning the model, please ensure to merge models before evaluation.
+
+For the inference, please follow the steps in "inference.ipynb". This would instruct the fine-tuned LLaVA model to give ratings to given patches. Then, the patch ratings are smoothed using "antonioGaussian.py" to generate meaning maps. Please refer to the "scene_compare.py" for the model evaluation.
