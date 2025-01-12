@@ -1,4 +1,5 @@
-# meaning-map
+# Automated Meaning Maps for Attention Guidance Using Finetuned Large Language Models
+
 Automatic estimation of meaning maps (Henderson and Hayes, 2017) by fine-tuning a multi-modal large language model (LLM) LLaVA.
 
 Our ability to seemingly effortlessly focus attention on meaningful regions in complex scenes has long eluded automated analysis, requiring thousands of human judgments to map the semantic forces that guide our gaze. While meaning maps have emerged as powerful predictors of attention, at times surpassing traditional saliency models, their creation requires extensive human ratings that limit research scalability and reproducibility. Here we present an efficient computational approach for automated, real-time generation of meaning maps. We first demonstrate that a fine-tuned vision-language model (LLaVA) can predict human attention patterns with accuracy surpassing human raters.
