@@ -11,4 +11,8 @@ We assessed performance by measuring the Pearson correlation between generated m
 
 The fine-tuned LLaVA often matches or outperforms human annotations (gray dashed line), which demonstrates its capability to predict attention distributions within scenes with high accuracy.
 
-## To implement:
+**To implement:**
+
+First, download the data set of 40 digitized photographs and their corresponding meaning maps from [OSF](https://osf.io/ptsvm) provided by Henderson and Hayes (2017). They also provide the attentional maps that can be used to evaluate the models.
+
+Then, split the meaning maps into patches of degree 3 and 7. The codes are available at
