@@ -118,8 +118,5 @@
     },
     "mean": -0.05545773072623804,
     "std": 0.14948076393208118
-  },
-  "sparse_grid_analysis": {
-    "note": "Requires re-running inference with sparse patches"
   }
 }
